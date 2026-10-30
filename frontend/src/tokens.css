@@ -1,0 +1,327 @@
+:root {
+  /* AZULES CORPORATIVOS */
+  --navy-900: #0D1A4A;   /* Fondo ultra oscuro, hover de botones primarios */
+  --navy-800: #13235B;   /* COLOR PRINCIPAL: Títulos, botones primarios, bordes fuertes, footer */
+  --navy-600: #2B3C7A;   /* Azul medio para contrastes intermedios */
+  --slate-400: #8D9AC0;  /* Texto secundario en fondos oscuros */
+  
+  /* COLOR DE ACENTO (ÚNICO Y PROTAGONISTA) */
+  --amber-500: #F5A623;  /* Acento: badges importantes, puntos decorativos, foco de teclado, botón de acción rápida */
+  --amber-600: #DE9217;  /* Hover del color de acento */
+  
+  /* SUPERFICIES Y FONDOS */
+  --surface: #FFFFFF;    /* Fondo de tarjetas, tablas, inputs y página base */
+  --bg: #F3F5FA;         /* Fondo gris frío para formularios (.form-card), hover de tablas y substrips */
+  --border: #D5DAE6;     /* Borde estándar sutil de 1px */
+  
+  /* TEXTO */
+  --text: #13235B;       /* Texto base (siempre azul marino oscuro, no negro puro) */
+  --text-muted: #5B6480; /* Gris azulado para etiquetas, subtítulos y mono */
+  
+  /* SEMÁNTICA / ESTADOS */
+  --success: #1E9E5A;    /* Verde para "DISPONIBLE" o confirmaciones */
+  --danger: #C62828;     /* Rojo para "ELIMINAR", alertas y moras */
+  
+  /* TIPOGRAFÍA */
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+  
+  /* GEOMETRÍA Y LÍNEAS */
+  --radius: 0px;         /* CRÍTICO: Ningún elemento lleva esquinas redondeadas */
+  --container: 1280px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --line: 1px solid var(--border);
+  --line-strong: 2px solid var(--navy-800);
+  
+  /* ESCALA DE ESPACIADO */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;
+  --sp-4: 16px;  --sp-5: 24px;  --sp-6: 32px;
+  --sp-7: 48px;  --sp-8: 64px;  --sp-9: 96px;
+}
+
+/* BASE STYLES */
+* {
+  border-radius: 0 !important;
+}
+
+body {
+  font-family: var(--font-display);
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--navy-800);
+}
+
+/* Scrollbar invisible pero funcional (elimina la barra ploma fea) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* SECTION TAGS */
+.section-tag, .tag-mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* NUMERICAL DATA */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  text-align: right;
+}
+
+/* BOTONES PRINCIPALES */
+.btn {
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--navy-800);
+  color: #FFFFFF;
+  border: 1px solid var(--navy-800);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.btn:hover {
+  background-color: var(--navy-900);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--amber-500);
+  outline-offset: 1px;
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: var(--navy-800);
+  border: 1px solid var(--navy-800);
+}
+.btn--outline:hover {
+  background-color: var(--bg);
+}
+
+.btn--accent {
+  background-color: var(--amber-500);
+  color: var(--navy-900);
+  font-weight: 800;
+  border: 1px solid var(--amber-500);
+}
+.btn--accent:hover {
+  background-color: var(--amber-600);
+  border-color: var(--amber-600);
+}
+
+.btn--danger {
+  background-color: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+.btn--danger:hover {
+  background-color: var(--danger);
+  color: #FFFFFF;
+}
+
+/* BOTONES ICONO (.btn-icon) */
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 0;
+  border: 1px solid var(--navy-800);
+  background: transparent;
+  color: var(--navy-800);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 150ms ease;
+}
+.btn-icon:hover { background-color: var(--bg); }
+.btn-icon--secondary:hover { background-color: var(--bg); }
+.btn-icon--danger { border-color: var(--danger); color: var(--danger); }
+.btn-icon--danger:hover { background-color: var(--danger); color: #fff; }
+.btn-icon--accent { background-color: var(--amber-500); border-color: var(--amber-500); color: var(--navy-900); }
+.btn-icon--accent:hover { background-color: var(--amber-600); border-color: var(--amber-600); }
+
+/* Tooltip puro con CSS */
+.btn-icon[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--navy-800);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms ease;
+  pointer-events: none;
+  z-index: 50;
+}
+.btn-icon[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* FORMULARIOS Y INPUTS */
+.form-card {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  padding: var(--sp-6);
+}
+
+.input-corp {
+  height: 44px;
+  background-color: var(--surface);
+  border: 1px solid var(--navy-800);
+  border-radius: 0;
+  padding: 0 14px;
+  font-size: 13px;
+  color: var(--navy-800);
+  width: 100%;
+  transition: all 150ms ease;
+}
+.input-corp:focus {
+  outline: 2px solid var(--amber-500);
+  outline-offset: 0;
+}
+
+.label-corp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* DARK PANEL */
+.dark-panel {
+  background-color: var(--navy-800);
+  color: #FFFFFF;
+  border: 1px solid var(--navy-900);
+  padding: 24px;
+}
+
+.dark-panel .section-tag {
+  color: var(--amber-500);
+}
+
+.total-monumental {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  line-height: 1.1;
+}
+
+/* BADGES PLANOS RECTANGULARES */
+.badge-corp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 0;
+}
+
+.badge--disponible {
+  background: transparent;
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+.badge--alquilado {
+  background: var(--amber-500);
+  color: var(--navy-900);
+  border: 1px solid var(--amber-500);
+}
+.badge--activo {
+  background: var(--navy-800);
+  color: #FFFFFF;
+  border: 1px solid var(--navy-800);
+}
+.badge--finalizado {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.badge--mora {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+/* TABLAS CORPORATIVAS */
+.table-corp {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--surface);
+}
+
+.table-corp th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  padding: 12px 10px;
+  border-bottom: 2px solid var(--navy-800);
+  text-align: left;
+}
+
+.table-corp td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--navy-800);
+}
+
+.table-corp tr:hover td {
+  background-color: var(--bg);
+}
+
+/* MICRO DETALLE CUADRADO 8x8px */
+.accent-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--amber-500);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
