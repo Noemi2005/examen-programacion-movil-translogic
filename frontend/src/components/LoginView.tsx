@@ -23,7 +23,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
       localStorage.setItem('translogic_user', JSON.stringify(data.usuario));
       onLoginSuccess(data.usuario, data.accessToken);
     } catch (err: any) {
-      setError(err.message || 'Error al autenticar');
+      setError(err.message || 'Credenciales inválidas');
     } finally {
       setLoading(false);
     }
@@ -40,21 +40,28 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-950 p-6 text-white text-center">
-          <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/40">
-            <Truck className="w-8 h-8 text-white" />
+    <div className="min-h-screen bg-[#F3F5FA] flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white border-2 border-[#13235B] shadow-[8px_8px_0_#13235B]">
+        {/* Cabecera Oscura Brutalista */}
+        <div className="bg-[#13235B] p-6 text-white text-center border-b-2 border-[#0D1A4A]">
+          <div className="w-12 h-12 mx-auto mb-3 bg-[#F5A623] text-[#0D1A4A] flex items-center justify-center">
+            <Truck className="w-7 h-7" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight">TRANSLOGIC S.A.</h1>
-          <p className="text-xs text-blue-200 mt-1">Gestión de Flotas, Servicios y Facturación</p>
+          <div className="flex items-center justify-center space-x-2">
+            <span className="accent-dot" />
+            <h1 className="font-display font-black text-xl tracking-wider text-white">
+              TRANSLOGIC S.A.
+            </h1>
+          </div>
+          <p className="tag-mono text-[10px] text-[#8D9AC0] mt-1">
+            CONTROL Y GESTIÓN DE FLOTAS - ACCESO SEGURO
+          </p>
         </div>
 
-        {/* Form Body */}
-        <div className="p-6 sm:p-8">
+        {/* Cuerpo del Formulario */}
+        <div className="p-6 sm:p-8 space-y-6">
           {error && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center space-x-2">
+            <div className="p-3 bg-white border-l-4 border-[#C62828] border border-[#D5DAE6] text-[#C62828] text-xs font-mono font-bold flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -62,69 +69,65 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                Correo Electrónico
-              </label>
+              <label className="label-corp">Correo Electrónico</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="correo@translogic.com"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
+                placeholder="admin@translogic.com"
+                className="input-corp font-mono text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                Contraseña
-              </label>
+              <label className="label-corp">Contraseña</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
+                className="input-corp text-xs"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-sm font-semibold shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 transition-all disabled:opacity-50"
+              className="btn btn--accent w-full h-12 text-xs font-bold"
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Autenticando...</span>
               ) : (
                 <>
-                  <span>Iniciar Sesión</span>
+                  <span>Ingresar al Sistema</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Quick Demo Access Buttons */}
-          <div className="mt-6 pt-5 border-t border-slate-100">
-            <p className="text-[11px] font-semibold text-slate-400 text-center uppercase tracking-wider mb-3">
-              Credenciales Rápidas para Evaluación
-            </p>
+          {/* Acceso Rápido para Evaluación */}
+          <div className="pt-4 border-t border-[#D5DAE6] space-y-3">
+            <span className="tag-mono block text-center text-[#5B6480]">
+              Credenciales Rápidas para Examen
+            </span>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => handleQuickLogin('ADMIN')}
-                className="py-2 px-3 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 text-[11px] font-medium text-slate-700 flex items-center justify-center space-x-1.5 transition-all"
+                className="btn btn--outline h-10 text-[11px]"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#13235B]" />
                 <span>Admin Demo</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('OPERADOR')}
-                className="py-2 px-3 rounded-lg border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 text-[11px] font-medium text-slate-700 flex items-center justify-center space-x-1.5 transition-all"
+                className="btn btn--outline h-10 text-[11px]"
               >
-                <Truck className="w-3.5 h-3.5 text-amber-600" />
+                <Truck className="w-3.5 h-3.5 text-[#F5A623]" />
                 <span>Operador Demo</span>
               </button>
             </div>

@@ -379,7 +379,10 @@ export class ServiciosService {
       .leftJoinAndSelect('s.vehiculo', 'v')
       .leftJoinAndSelect('v.camionCarga', 'cc')
       .leftJoinAndSelect('v.furgonetaElectrica', 'fe')
-      .orderBy('s.createdAt', 'DESC');
+      .leftJoinAndSelect('s.historialEstados', 'h')
+      .leftJoinAndSelect('h.usuario', 'u')
+      .orderBy('s.createdAt', 'DESC')
+      .addOrderBy('h.fecha', 'ASC');
 
     if (estado) qb.andWhere('s.estado = :estado', { estado });
     if (clienteId) qb.andWhere('s.clienteId = :clienteId', { clienteId });

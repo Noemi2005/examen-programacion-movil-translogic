@@ -104,6 +104,10 @@ class ApiClient {
     return this.request<any>(`/servicios?${params.toString()}`);
   }
 
+  async getServicio(id: string) {
+    return this.request<any>(`/servicios/${id}`);
+  }
+
   async simularTarifa(data: { vehiculoId: string; distanciaKm: number; pesoCargaKg: number; recargaPlanificada?: boolean }) {
     return this.request<any>('/servicios/simular-tarifa', {
       method: 'POST',

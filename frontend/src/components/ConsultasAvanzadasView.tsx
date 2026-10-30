@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Database, Search, Filter, RefreshCw, AlertCircle, ArrowUpRight } from 'lucide-react';
+import { Database, RefreshCw, AlertCircle } from 'lucide-react';
 import { api } from '../api/client';
 
 export const ConsultasAvanzadasView: React.FC = () => {
@@ -8,7 +8,7 @@ export const ConsultasAvanzadasView: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Filters for queries 23 and 24
+  // Filtros
   const [fechaInicio, setFechaInicio] = useState('2026-10-01');
   const [fechaFin, setFechaFin] = useState('2026-10-31');
 
@@ -90,83 +90,84 @@ export const ConsultasAvanzadasView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
-            <Database className="w-6 h-6 text-blue-600" />
-            <span>Ocho Consultas Avanzadas en Base de Datos (Req-07)</span>
-          </h2>
-          <p className="text-xs text-slate-500 mt-1">
-            Ejecución nativa en el motor PostgreSQL mediante SQL y agregaciones analíticas.
-          </p>
+      {/* Header Idéntico a la Imagen 1 */}
+      <div className="space-y-1">
+        <span className="font-mono text-xs font-bold text-[#5B6480] uppercase tracking-widest">
+          05 / REPORTES Y ANALÍTICA
+        </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-[#13235B]">
+          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#13235B] tracking-tight uppercase">
+            CONSULTAS ANALÍTICAS SQL
+          </h1>
+          <button
+            type="button"
+            onClick={ejecutarConsulta}
+            disabled={loading}
+            className="btn bg-[#13235B] hover:bg-[#0D1A4A] text-white h-11 px-5 text-xs font-extrabold tracking-wider"
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <span>EJECUTAR CONSULTA</span>
+          </button>
         </div>
-
-        <button
-          onClick={ejecutarConsulta}
-          disabled={loading}
-          className="flex items-center justify-center space-x-1.5 px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors self-start md:self-auto"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          <span>Refrescar Consulta</span>
-        </button>
       </div>
 
-      {/* Query Selector Tabs */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        {consultas.map((c) => (
-          <button
-            key={c.key}
-            onClick={() => setSelectedConsulta(c.key)}
-            className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
-              selectedConsulta === c.key
-                ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300'
-            }`}
-          >
-            <span
-              className={`text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded self-start mb-2 ${
-                selectedConsulta === c.key ? 'bg-blue-700 text-blue-100' : 'bg-slate-100 text-slate-600'
+      {/* Tabs */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        {consultas.map((c) => {
+          const isSelected = selectedConsulta === c.key;
+          return (
+            <button
+              key={c.key}
+              type="button"
+              onClick={() => setSelectedConsulta(c.key)}
+              className={`p-3 border text-left transition-all ${
+                isSelected
+                  ? 'bg-[#13235B] text-white border-[#13235B]'
+                  : 'bg-white text-[#13235B] border-[#D5DAE6] hover:border-[#13235B]'
               }`}
             >
-              Consulta #{c.numero}
-            </span>
-            <span className="text-xs font-bold line-clamp-1">{c.titulo}</span>
-          </button>
-        ))}
+              <span
+                className={`tag-mono text-[9px] block ${
+                  isSelected ? 'text-[#F5A623]' : 'text-[#5B6480]'
+                }`}
+              >
+                CONSULTA #{c.numero}
+              </span>
+              <span className="font-bold text-xs uppercase line-clamp-1 mt-1 block">
+                {c.titulo}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Description & Optional Date Filters */}
+      {/* Descripción y Filtros */}
       {consultaActual && (
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+        <div className="p-4 bg-white border border-[#D5DAE6] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <span className="font-bold text-slate-800">Objetivo de la Consulta:</span>
-            <p className="text-slate-600 mt-0.5">{consultaActual.descripcion}</p>
+            <span className="tag-mono block text-[#13235B] font-bold">Definición de Consulta:</span>
+            <p className="text-xs text-[#5B6480] mt-0.5 font-mono">{consultaActual.descripcion}</p>
           </div>
 
           {(selectedConsulta === 'vehiculos-sin-servicios' || selectedConsulta === 'clientes-frecuentes') && (
             <div className="flex items-center space-x-2">
-              <div>
-                <label className="text-[10px] font-semibold text-slate-500 block">Fecha Inicio</label>
-                <input
-                  type="date"
-                  value={fechaInicio}
-                  onChange={(e) => setFechaInicio(e.target.value)}
-                  className="px-2 py-1 rounded border border-slate-300 text-xs bg-white"
-                />
-              </div>
-              <div>
-                <label className="text-[10px] font-semibold text-slate-500 block">Fecha Fin</label>
-                <input
-                  type="date"
-                  value={fechaFin}
-                  onChange={(e) => setFechaFin(e.target.value)}
-                  className="px-2 py-1 rounded border border-slate-300 text-xs bg-white"
-                />
-              </div>
+              <input
+                type="date"
+                value={fechaInicio}
+                onChange={(e) => setFechaInicio(e.target.value)}
+                className="input-corp text-xs font-mono w-auto h-9"
+              />
+              <span className="text-xs text-[#5B6480]">a</span>
+              <input
+                type="date"
+                value={fechaFin}
+                onChange={(e) => setFechaFin(e.target.value)}
+                className="input-corp text-xs font-mono w-auto h-9"
+              />
               <button
+                type="button"
                 onClick={ejecutarConsulta}
-                className="mt-3.5 px-3 py-1 bg-blue-600 text-white font-semibold rounded text-xs"
+                className="btn btn--accent h-9 text-xs"
               >
                 Filtrar
               </button>
@@ -176,54 +177,48 @@ export const ConsultasAvanzadasView: React.FC = () => {
       )}
 
       {error && (
-        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center space-x-2">
-          <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
-          <span>{error}</span>
+        <div className="p-4 bg-white border-l-4 border-[#C62828] border border-[#D5DAE6] text-[#C62828] text-xs font-mono">
+          {error}
         </div>
       )}
 
-      {/* Results Dynamic Table */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      {/* Resultados */}
+      <div className="bg-white border border-[#D5DAE6] overflow-x-auto shadow-sm">
         {loading ? (
-          <div className="text-center py-12">
-            <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-            <p className="text-xs text-slate-500">Ejecutando SQL analítico en el motor de base de datos...</p>
+          <div className="p-12 text-center text-xs font-mono text-[#5B6480]">
+            Ejecutando agregación analítica en PostgreSQL...
           </div>
         ) : results.length === 0 ? (
-          <div className="p-8 text-center text-xs text-slate-400">
+          <div className="p-12 text-center text-xs font-mono text-[#5B6480]">
             No se encontraron registros que cumplan con la condición de la consulta.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-100 uppercase text-[10px]">
-                <tr>
-                  {Object.keys(results[0]).map((key) => (
-                    <th key={key} className="px-4 py-3">
-                      {key}
-                    </th>
+          <table className="table-corp">
+            <thead>
+              <tr>
+                {Object.keys(results[0]).map((key) => (
+                  <th key={key}>{key}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {results.map((row, idx) => (
+                <tr key={idx}>
+                  {Object.values(row).map((val: any, i) => (
+                    <td key={i} className="font-mono text-xs text-[#13235B]">
+                      {val === null || val === undefined ? (
+                        <span className="text-[#8D9AC0] italic">null</span>
+                      ) : typeof val === 'object' ? (
+                        JSON.stringify(val)
+                      ) : (
+                        String(val)
+                      )}
+                    </td>
                   ))}
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {results.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
-                    {Object.values(row).map((val: any, i) => (
-                      <td key={i} className="px-4 py-3 font-medium text-slate-800">
-                        {val === null || val === undefined ? (
-                          <span className="text-slate-300 italic">null</span>
-                        ) : typeof val === 'object' ? (
-                          JSON.stringify(val)
-                        ) : (
-                          String(val)
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>
