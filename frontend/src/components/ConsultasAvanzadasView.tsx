@@ -183,7 +183,7 @@ export const ConsultasAvanzadasView: React.FC = () => {
       )}
 
       {/* Resultados */}
-      <div className="bg-white border border-[#D5DAE6] overflow-x-auto shadow-sm">
+      <div className="bg-white border border-[#D5DAE6] overflow-x-auto no-scrollbar shadow-sm">
         {loading ? (
           <div className="p-12 text-center text-xs font-mono text-[#5B6480]">
             Ejecutando agregación analítica en PostgreSQL...

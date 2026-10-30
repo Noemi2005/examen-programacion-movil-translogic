@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Truck, Check, AlertCircle } from 'lucide-react';
 import { api } from '../api/client';
 import { ServicioTransporte, Vehiculo } from '../types';
+import { alerts } from '../utils/alerts';
 
 interface ServicioAsignarViewProps {
   servicioId: string;
@@ -48,6 +49,7 @@ export const ServicioAsignarView: React.FC<ServicioAsignarViewProps> = ({
   const handleAsignar = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedVehiculoId) {
+      await alerts.showWarning('Selección Requerida', 'Debes seleccionar un vehículo de la flota para este despacho.');
       setError('Debes seleccionar un vehículo');
       return;
     }
@@ -55,9 +57,12 @@ export const ServicioAsignarView: React.FC<ServicioAsignarViewProps> = ({
     setError(null);
     try {
       await api.asignarVehiculo(servicioId, selectedVehiculoId, recargaPlanificada);
+      await alerts.showSuccess('¡Unidad Asignada!', 'El vehículo ha sido asignado al servicio correctamente.');
       onSuccess();
     } catch (err: any) {
-      setError(err.message || 'Conflicto en la asignación');
+      const msg = err.message || 'Conflicto en la asignación del vehículo';
+      setError(msg);
+      await alerts.showError('Conflicto de Asignación', msg);
     } finally {
       setSubmitting(false);
     }

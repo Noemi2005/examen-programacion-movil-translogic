@@ -202,7 +202,7 @@ export const ConsultaDetalleView: React.FC<ConsultaDetalleViewProps> = ({
             No se encontraron registros para los criterios especificados.
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto no-scrollbar">
             <table className="table-corp">
               <thead>
                 <tr>

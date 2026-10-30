@@ -10,12 +10,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 pb-10">
           {/* Columna Izquierda: Marca y Descripción */}
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 bg-[#F5A623] inline-block flex-shrink-0" />
-              <h2 className="font-display font-black text-xl tracking-wider text-white">
-                TRANSLOGIC S.A.
-              </h2>
+          <div className="space-y-3">
+            <div
+              className="flex items-center cursor-pointer select-none"
+              onClick={() => onNavigate('dashboard')}
+            >
+              <img
+                src="/logo-white.png"
+                alt="TRANSLOGIC S.A."
+                className="h-10 w-auto object-contain max-w-[200px]"
+              />
             </div>
             <p className="text-xs text-[#8D9AC0] font-sans font-medium">
               Transporte inteligente de carga y furgonetas eléctricas

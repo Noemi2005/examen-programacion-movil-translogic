@@ -1,8 +1,19 @@
 # TRANSLOGIC S.A. - Sistema Inteligente de Gestión de Flotas, Servicios y Facturación
 > **Examen Práctico de Programación Móvil - Examen Parcial I**  
-> **Nivel:** Intermedio | **Modalidad:** Individual | **Puntaje:** 3,00 puntos  
-> **Estudiante:** Noemí  
+> **Estudiante:** Noemí Cajamarca  
 > **Repositorio Oficial:** [examen-programacion-movil-translogic](https://github.com/Noemi2005/examen-programacion-movil-translogic)
+
+---
+
+## Tabla de Contenidos
+1. [Arquitectura de la Solución (3 Capas)](#1-arquitectura-de-la-solución-3-capas)
+2. [Galería Visual y Capturas del Sistema](#2-galería-visual-y-capturas-del-sistema)
+3. [Estrategia Git y Ramas](#3-estrategia-git-y-ramas)
+4. [Reglas de Negocio Implementadas](#4-reglas-de-negocio-implementadas)
+5. [Las 8 Consultas Analíticas en Base de Datos (Req-07)](#5-las-8-consultas-analíticas-en-base-de-datos-req-07)
+6. [Justificación Teórica de Seguridad (Req-09)](#6-justificación-teórica-de-seguridad-req-09)
+7. [Instrucciones de Instalación y Ejecución](#7-instrucciones-de-instalación-y-ejecución)
+8. [Credenciales de Acceso al Sistema](#8-credenciales-de-acceso-al-sistema)
 
 ---
 
@@ -10,17 +21,9 @@
 
 La solución está construida bajo una estricta **arquitectura en tres capas desacopladas**, garantizando que toda la lógica de negocio y las validaciones críticas se procesen y verifiquen en el servidor:
 
-```
-[ Frontend Móvil (Vite + React + TypeScript + Tailwind CSS) ]
-                           │
-                 (JSON REST / Bearer JWT)
-                           ▼
-[ Backend API REST (NestJS 10 + TypeScript + TypeORM + Jest) ]
-                           │
-                (Transacciones ACID / SQL)
-                           ▼
-        [ Base de Datos Relacional (PostgreSQL / pgAdmin) ]
-```
+<p align="center">
+  <img src="frontend/public/arquitectura_tecnol%C3%B3gica_en_capas.png" alt="Arquitectura Tecnológica en Capas" width="85%" />
+</p>
 
 ### Organización por Capas y Carpetas
 
@@ -55,7 +58,43 @@ Interfaz móvil corporativa moderna con Tailwind CSS y diseño brutalista:
 
 ---
 
-## 2. Estrategia Git y Ramas
+## 2. Galería Visual y Capturas del Sistema
+
+A continuación se presentan las capturas oficiales de la interfaz de usuario implementada con diseño corporativo brutalista:
+
+### A. Autenticación y Control de Acceso (Login)
+<p align="center">
+  <img src="frontend/public/login.png" alt="Pantalla de Autenticación de Usuarios" width="85%" />
+</p>
+
+### B. Dashboard Operativo y Financiero
+<p align="center">
+  <img src="frontend/public/dashboard.png" alt="Dashboard Interactivo y Analítico" width="85%" />
+</p>
+
+### C. Gestión y Listado de Flota Vehicular
+<p align="center">
+  <img src="frontend/public/LISTADO%20DE%20VEH%C3%8DCULOS.png" alt="Listado Corporativo de Vehículos" width="85%" />
+</p>
+
+### D. Ficha Técnica y Telemetría del Vehículo
+<p align="center">
+  <img src="frontend/public/detallevehiculos.png" alt="Ficha Técnica y Detalle del Vehículo" width="85%" />
+</p>
+
+### E. Emisión de Factura Oficial y Comprobante PDF (Req-04 / Req-08)
+<p align="center">
+  <img src="frontend/public/reportepdf.png" alt="Comprobante de Factura Oficial en Formato PDF" width="85%" />
+</p>
+
+### F. Modelo Entidad-Relación de la Base de Datos (PostgreSQL)
+<p align="center">
+  <img src="frontend/public/database.png" alt="Diagrama Entidad-Relación de Base de Datos" width="85%" />
+</p>
+
+---
+
+## 3. Estrategia Git y Ramas
 
 El versionamiento del proyecto sigue el estándar **Git Flow**:
 * **`main`**: Rama principal estable y de entrega final.
@@ -63,10 +102,11 @@ El versionamiento del proyecto sigue el estándar **Git Flow**:
 * **`feature/req-01-backend-database`**: Modelado de datos, TypeORM, entidades y seeders reproducibles.
 * **`feature/req-02-03-vehiculos-servicios`**: Tarifas polimórficas, validaciones de carga/batería, control de solapamiento de horarios, auditoría y control de concurrencia.
 * **`feature/req-06-08-frontend-mobile`**: Frontend responsivo, cotizador en vivo, liquidación simulada, ticket POS, generación de PDF y dashboard interactivo.
+* **`feature/req-08-reportes-pdf-ui`**: Identidad corporativa, alertas interactivas SweetAlert2, edición fotográfica de unidades vehiculares, optimización de comprobantes PDF tipo RIDE SRI y documentación técnica visual.
 
 ---
 
-## 3. Reglas de Negocio Implementadas
+## 4. Reglas de Negocio Implementadas
 
 ### A. Tarifas Polimórficas (Req-02)
 * **Camión de carga**:
@@ -96,7 +136,7 @@ El versionamiento del proyecto sigue el estándar **Git Flow**:
 
 ---
 
-## 4. Las 8 Consultas Analíticas en Base de Datos (Req-07)
+## 5. Las 8 Consultas Analíticas en Base de Datos (Req-07)
 
 Todas las consultas se ejecutan directamente en PostgreSQL mediante SQL nativo y optimizado:
 1. **01 / Costo supera el promedio**: Servicios cuyo costo operativo supera el promedio general de despachos completados (Subconsulta `AVG`).
@@ -110,7 +150,7 @@ Todas las consultas se ejecutan directamente en PostgreSQL mediante SQL nativo y
 
 ---
 
-## 5. Justificación Teórica de Seguridad (Req-09)
+## 6. Justificación Teórica de Seguridad (Req-09)
 
 > ### ¿Por qué validar solo en el frontend no garantiza integridad?
 > 1. **Bypass del Cliente**: Cualquier usuario puede evadir los formularios del navegador usando herramientas como Postman, cURL o scripts HTTP, enviando peticiones manipuladas directamente al backend.
@@ -119,7 +159,7 @@ Todas las consultas se ejecutan directamente en PostgreSQL mediante SQL nativo y
 
 ---
 
-## 6. Instrucciones de Instalación y Ejecución
+## 7. Instrucciones de Instalación y Ejecución
 
 ### Requisitos Previos:
 * Node.js v18+ o v20+
@@ -160,7 +200,7 @@ npm run dev
 
 ---
 
-## 7. Credenciales de Acceso al Sistema
+## 8. Credenciales de Acceso al Sistema
 
 El sistema cuenta con dos perfiles de usuario generados automáticamente por el seed:
 

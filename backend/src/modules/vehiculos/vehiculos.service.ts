@@ -93,6 +93,7 @@ export class VehiculosService {
       kilometraje: createDto.kilometraje || 0,
       tipo: createDto.tipo,
       estado: createDto.estado || EstadoVehiculo.DISPONIBLE,
+      imagenUrl: createDto.imagenUrl,
     });
 
     const guardado = await this.vehiculoRepo.save(nuevoVehiculo);
@@ -134,6 +135,7 @@ export class VehiculosService {
     if (updateDto.capacidadCargaKg) vehiculo.capacidadCargaKg = updateDto.capacidadCargaKg;
     if (updateDto.kilometraje !== undefined) vehiculo.kilometraje = updateDto.kilometraje;
     if (updateDto.estado) vehiculo.estado = updateDto.estado;
+    if (updateDto.imagenUrl !== undefined) vehiculo.imagenUrl = updateDto.imagenUrl;
 
     await this.vehiculoRepo.save(vehiculo);
 

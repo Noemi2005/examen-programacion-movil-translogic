@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Receipt, Check, AlertCircle, Save } from 'lucide-react';
 import { api } from '../api/client';
 import { Cliente, ServicioTransporte, EstadoServicio } from '../types';
+import { alerts } from '../utils/alerts';
 
 interface FacturaFormViewProps {
   onBack: () => void;
@@ -110,13 +111,16 @@ export const FacturaFormView: React.FC<FacturaFormViewProps> = ({ onBack, onSucc
     setLoading(true);
     setError(null);
     try {
-      await api.createFactura({
+      const res = await api.createFactura({
         clienteId,
         serviciosIds: selectedIds,
       });
+      await alerts.showSuccess('¡Factura Emitida!', `Comprobante ${res.codigo || ''} generado y liquidado exitosamente.`);
       onSuccess();
     } catch (err: any) {
-      setError(err.message || 'Error al emitir factura');
+      const msg = err.message || 'Error al emitir factura';
+      setError(msg);
+      await alerts.showError('Error de Facturación', msg);
     } finally {
       setLoading(false);
     }

@@ -103,6 +103,11 @@ export class CreateVehiculoDto {
   @IsEnum(EstadoVehiculo)
   estado?: EstadoVehiculo;
 
+  @ApiPropertyOptional({ example: 'https://images.unsplash.com/...', description: 'URL de la fotografía del vehículo o base64' })
+  @IsOptional()
+  @IsString()
+  imagenUrl?: string;
+
   @ApiPropertyOptional({ type: CamionCargaDto })
   @IsOptional()
   @ValidateNested()

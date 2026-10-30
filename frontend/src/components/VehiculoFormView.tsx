@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Save, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Save, AlertCircle, Upload, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { api } from '../api/client';
 import { TipoVehiculo, EstadoVehiculo, Vehiculo } from '../types';
+import { alerts } from '../utils/alerts';
 
 interface VehiculoFormViewProps {
   vehiculoIdToEdit?: string | null;
@@ -17,6 +18,7 @@ export const VehiculoFormView: React.FC<VehiculoFormViewProps> = ({
   const isEditing = Boolean(vehiculoIdToEdit);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form Fields
   const [placa, setPlaca] = useState('');
@@ -27,6 +29,7 @@ export const VehiculoFormView: React.FC<VehiculoFormViewProps> = ({
   const [kilometraje, setKilometraje] = useState(0);
   const [tipo, setTipo] = useState<TipoVehiculo>(TipoVehiculo.CAMION_CARGA);
   const [estado, setEstado] = useState<EstadoVehiculo>(EstadoVehiculo.DISPONIBLE);
+  const [imagenUrl, setImagenUrl] = useState('');
 
   // Camión
   const [consumoLitros, setConsumoLitros] = useState(22.5);
@@ -59,6 +62,7 @@ export const VehiculoFormView: React.FC<VehiculoFormViewProps> = ({
       setKilometraje(v.kilometraje);
       setTipo(v.tipo);
       setEstado(v.estado);
+      setImagenUrl(v.imagenUrl || '');
 
       if (v.tipo === TipoVehiculo.CAMION_CARGA && v.camionCarga) {
         setConsumoLitros(v.camionCarga.consumoLitros100Km);
@@ -79,6 +83,23 @@ export const VehiculoFormView: React.FC<VehiculoFormViewProps> = ({
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('El archivo es demasiado grande (máximo 5MB)');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setImagenUrl(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -94,6 +115,7 @@ export const VehiculoFormView: React.FC<VehiculoFormViewProps> = ({
         kilometraje: Number(kilometraje),
         tipo,
         estado,
+        imagenUrl: imagenUrl.trim(),
       };
 
       if (tipo === TipoVehiculo.CAMION_CARGA) {
@@ -115,12 +137,16 @@ export const VehiculoFormView: React.FC<VehiculoFormViewProps> = ({
 
       if (isEditing && vehiculoIdToEdit) {
         await api.updateVehiculo(vehiculoIdToEdit, payload);
+        await alerts.showSuccess('¡Ficha Actualizada!', `Los datos de la unidad ${placa.toUpperCase()} han sido actualizados.`);
       } else {
         await api.createVehiculo(payload);
+        await alerts.showSuccess('¡Vehículo Registrado!', `La unidad ${placa.toUpperCase()} ha sido ingresada a la flota.`);
       }
       onSuccess();
     } catch (err: any) {
-      setError(err.message || 'Error al guardar los datos');
+      const msg = err.message || 'Error al guardar los datos del vehículo';
+      setError(msg);
+      await alerts.showError('Error al Guardar', msg);
     } finally {
       setLoading(false);
     }
@@ -389,6 +415,97 @@ export const VehiculoFormView: React.FC<VehiculoFormViewProps> = ({
             </div>
           </div>
         )}
+
+        {/* Fotografía / Identificación Visual del Vehículo */}
+        <div className="border-t-2 border-[#13235B] pt-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="accent-dot" />
+              <h3 className="text-xs font-bold text-[#13235B] uppercase tracking-wider">
+                FOTOGRAFÍA / IDENTIFICACIÓN VISUAL DEL VEHÍCULO
+              </h3>
+            </div>
+            {imagenUrl && (
+              <button
+                type="button"
+                onClick={() => setImagenUrl('')}
+                className="text-[11px] font-mono text-[#C62828] hover:underline flex items-center space-x-1"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Quitar Fotografía</span>
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start bg-[#F3F5FA] border border-[#D5DAE6] p-4">
+            {/* Input por Enlace Web y Botón de Subida */}
+            <div className="md:col-span-7 space-y-3">
+              <div>
+                <label className="label-corp">OPCIÓN 1: URL DE IMAGEN (ENLACE WEB)</label>
+                <input
+                  type="url"
+                  placeholder="https://images.unsplash.com/foto-camion.jpg"
+                  value={imagenUrl.startsWith('data:') ? '(Fotografía subida desde archivo local)' : imagenUrl}
+                  onChange={(e) => setImagenUrl(e.target.value)}
+                  disabled={imagenUrl.startsWith('data:')}
+                  className="input-corp text-xs font-mono"
+                />
+                <span className="text-[10px] font-mono text-[#5B6480] block mt-1">
+                  Pega un enlace directo de internet (Unsplash, CDN o servidor de imágenes).
+                </span>
+              </div>
+
+              <div className="pt-2 border-t border-[#D5DAE6]">
+                <label className="label-corp">OPCIÓN 2: CARGAR ARCHIVO LOCAL DESDE TU DISPOSITIVO</label>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/png, image/jpeg, image/webp"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="btn btn--outline h-10 px-4 text-xs font-bold flex items-center space-x-2 text-[#13235B] border-[#13235B] bg-white hover:bg-[#FAFBFD]"
+                >
+                  <Upload className="w-4 h-4 text-[#F5A623]" />
+                  <span>SELECCIONAR FOTO DE LA COMPUTADORA</span>
+                </button>
+                <span className="text-[10px] font-mono text-[#5B6480] block mt-1">
+                  Formatos aceptados: PNG, JPG, JPEG o WEBP (hasta 5MB).
+                </span>
+              </div>
+            </div>
+
+            {/* Recuadro de Previsualización en Vivo */}
+            <div className="md:col-span-5 flex flex-col items-center">
+              <span className="tag-mono text-[10px] text-[#5B6480] mb-1.5 self-start">
+                PREVISUALIZACIÓN EN VIVO:
+              </span>
+              <div className="w-full h-40 bg-white border border-[#D5DAE6] relative overflow-hidden flex items-center justify-center">
+                {imagenUrl ? (
+                  <img
+                    src={imagenUrl}
+                    alt="Previsualización del Vehículo"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover object-center"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        'https://images.unsplash.com/photo-1559297434-fae8a1916a79?auto=format&fit=crop&w=600&q=80';
+                    }}
+                  />
+                ) : (
+                  <div className="text-center p-4 text-[#8D9AC0]">
+                    <ImageIcon className="w-8 h-8 mx-auto mb-1 opacity-40 text-[#13235B]" />
+                    <span className="font-mono text-[10px] block text-[#5B6480]">Sin imagen asignada</span>
+                    <span className="text-[9px] text-[#8D9AC0]">Ingresa un enlace o sube un archivo</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Botones de Acción */}
         <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#D5DAE6]">

@@ -32,15 +32,16 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Navbar Superior Blanco */}
       <header className="sticky top-0 z-40 bg-white border-b border-[#D5DAE6]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Logo / Marca */}
+          {/* Logo / Marca Oficial sin Fondo */}
           <div
-            className="flex items-center space-x-2 cursor-pointer"
+            className="flex items-center cursor-pointer select-none py-1"
             onClick={() => setActiveTab('dashboard')}
           >
-            <span className="w-2.5 h-2.5 bg-[#F5A623] inline-block flex-shrink-0" />
-            <span className="font-display font-black text-xl tracking-wider text-[#13235B]">
-              TRANSLOGIC
-            </span>
+            <img
+              src="/logo.png"
+              alt="TRANSLOGIC"
+              className="h-10 sm:h-11 w-auto object-contain max-w-[220px]"
+            />
           </div>
 
           {/* Enlaces de Navegación Centrales */}

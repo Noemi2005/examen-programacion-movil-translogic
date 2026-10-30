@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Truck, ShieldCheck, AlertCircle, ArrowRight } from 'lucide-react';
 import { api } from '../api/client';
 import { Usuario } from '../types';
+import { alerts } from '../utils/alerts';
 
 interface LoginViewProps {
   onLoginSuccess: (user: Usuario, token: string) => void;
@@ -21,9 +22,12 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
       const data = await api.login(email, password);
       localStorage.setItem('translogic_token', data.accessToken);
       localStorage.setItem('translogic_user', JSON.stringify(data.usuario));
+      alerts.showToast(`Bienvenido al sistema, ${data.usuario.nombre}`, 'success');
       onLoginSuccess(data.usuario, data.accessToken);
     } catch (err: any) {
-      setError(err.message || 'Credenciales inválidas');
+      const msg = err.message || 'Credenciales inválidas';
+      setError(msg);
+      await alerts.showError('Acceso Denegado', msg);
     } finally {
       setLoading(false);
     }
@@ -44,16 +48,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
       <div className="w-full max-w-md bg-white border-2 border-[#13235B] shadow-[8px_8px_0_#13235B]">
         {/* Cabecera Oscura Brutalista */}
         <div className="bg-[#13235B] p-6 text-white text-center border-b-2 border-[#0D1A4A]">
-          <div className="w-12 h-12 mx-auto mb-3 bg-[#F5A623] text-[#0D1A4A] flex items-center justify-center">
-            <Truck className="w-7 h-7" />
+          <div className="flex justify-center mb-3">
+            <img
+              src="/logo-white.png"
+              alt="TRANSLOGIC S.A."
+              className="h-10 sm:h-11 w-auto object-contain max-w-[220px]"
+            />
           </div>
-          <div className="flex items-center justify-center space-x-2">
-            <span className="accent-dot" />
-            <h1 className="font-display font-black text-xl tracking-wider text-white">
-              TRANSLOGIC S.A.
-            </h1>
-          </div>
-          <p className="tag-mono text-[10px] text-[#8D9AC0] mt-1">
+          <p className="tag-mono text-[10px] text-[#8D9AC0]">
             CONTROL Y GESTIÓN DE FLOTAS - ACCESO SEGURO
           </p>
         </div>

@@ -46,11 +46,11 @@ export const FacturaDetalleModal: React.FC<FacturaDetalleModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0D1A4A]/70 backdrop-blur-xs p-3 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0D1A4A]/80 backdrop-blur-xs p-4 sm:p-8 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="bg-white border-2 border-[#13235B] w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative my-auto animate-in fade-in zoom-in-95 duration-150"
+        className="bg-white border-2 border-[#13235B] w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl relative my-auto animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
         style={{ borderRadius: 0 }}
       >
@@ -135,7 +135,7 @@ export const FacturaDetalleModal: React.FC<FacturaDetalleModalProps> = ({
                   </span>
                 </div>
 
-                <div className="border border-[#D5DAE6] overflow-x-auto">
+                <div className="border border-[#D5DAE6] overflow-x-auto no-scrollbar">
                   <table className="table-corp">
                     <thead>
                       <tr>

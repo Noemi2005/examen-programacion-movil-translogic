@@ -63,6 +63,7 @@ export interface Vehiculo {
   kilometraje: number;
   tipo: TipoVehiculo;
   estado: EstadoVehiculo;
+  imagenUrl?: string;
   camionCarga?: CamionCarga;
   furgonetaElectrica?: FurgonetaElectrica;
 }

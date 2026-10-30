@@ -126,6 +126,7 @@ async function runSeed() {
         kilometraje: 45000,
         tipo: TipoVehiculo.CAMION_CARGA,
         estado: EstadoVehiculo.DISPONIBLE,
+        imagenUrl: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1000&q=80',
       }),
     );
     await camionRepo.save(
@@ -137,6 +138,9 @@ async function runSeed() {
         costoMantenimientoKm: 0.12,
       }),
     );
+  } else if (!camion1.imagenUrl) {
+    camion1.imagenUrl = 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1000&q=80';
+    await vehiculoRepo.save(camion1);
   }
 
   // Camión 2
@@ -152,6 +156,7 @@ async function runSeed() {
         kilometraje: 28000,
         tipo: TipoVehiculo.CAMION_CARGA,
         estado: EstadoVehiculo.DISPONIBLE,
+        imagenUrl: 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=1000&q=80',
       }),
     );
     await camionRepo.save(
@@ -163,6 +168,9 @@ async function runSeed() {
         costoMantenimientoKm: 0.10,
       }),
     );
+  } else if (!camion2.imagenUrl) {
+    camion2.imagenUrl = 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=1000&q=80';
+    await vehiculoRepo.save(camion2);
   }
 
   // Furgoneta Eléctrica 1
@@ -178,6 +186,7 @@ async function runSeed() {
         kilometraje: 12000,
         tipo: TipoVehiculo.FURGONETA_ELECTRICA,
         estado: EstadoVehiculo.DISPONIBLE,
+        imagenUrl: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80',
       }),
     );
     await furgonetaRepo.save(
@@ -190,6 +199,9 @@ async function runSeed() {
         porcentajeBateria: 95,
       }),
     );
+  } else if (!furgoneta1.imagenUrl) {
+    furgoneta1.imagenUrl = 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80';
+    await vehiculoRepo.save(furgoneta1);
   }
 
   // Furgoneta Eléctrica 2
@@ -205,6 +217,7 @@ async function runSeed() {
         kilometraje: 18500,
         tipo: TipoVehiculo.FURGONETA_ELECTRICA,
         estado: EstadoVehiculo.DISPONIBLE,
+        imagenUrl: 'https://images.unsplash.com/photo-1559297434-fae8a1916a79?auto=format&fit=crop&w=1000&q=80',
       }),
     );
     await furgonetaRepo.save(
@@ -217,6 +230,9 @@ async function runSeed() {
         porcentajeBateria: 85,
       }),
     );
+  } else if (!furgoneta2.imagenUrl) {
+    furgoneta2.imagenUrl = 'https://images.unsplash.com/photo-1559297434-fae8a1916a79?auto=format&fit=crop&w=1000&q=80';
+    await vehiculoRepo.save(furgoneta2);
   }
 
   // Camión 3 (Sin servicios en octubre para Consulta 24)
@@ -232,6 +248,7 @@ async function runSeed() {
         kilometraje: 8500,
         tipo: TipoVehiculo.CAMION_CARGA,
         estado: EstadoVehiculo.DISPONIBLE,
+        imagenUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80',
       }),
     );
     await camionRepo.save(
@@ -243,6 +260,9 @@ async function runSeed() {
         costoMantenimientoKm: 0.11,
       }),
     );
+  } else if (!camion3.imagenUrl) {
+    camion3.imagenUrl = 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80';
+    await vehiculoRepo.save(camion3);
   }
 
   // 4. Servicios completos para todas las consultas analíticas

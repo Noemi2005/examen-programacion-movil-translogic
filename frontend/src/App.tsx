@@ -104,6 +104,10 @@ export const App: React.FC = () => {
               setSelectedVehiculoId(id);
               setCurrentRoute('vehiculos-eficiencia');
             }}
+            onNavigateToEdit={(id) => {
+              setSelectedVehiculoId(id);
+              setCurrentRoute('vehiculos-editar');
+            }}
           />
         )}
         {currentRoute === 'vehiculos-nuevo' && (

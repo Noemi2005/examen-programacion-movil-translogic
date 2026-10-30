@@ -1,31 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Activity, BatteryCharging, Fuel, ShieldCheck, Truck, Navigation, Calendar } from 'lucide-react';
+import { ArrowLeft, Activity, BatteryCharging, Fuel, ShieldCheck, Truck, Navigation, Calendar, Edit3 } from 'lucide-react';
 import { api } from '../api/client';
 import { Vehiculo, TipoVehiculo, EstadoVehiculo, ServicioTransporte } from '../types';
-
-const FOTOS_VEHICULOS: Record<string, string> = {
-  // Renault Master E-Tech (2023) - Furgoneta eléctrica de reparto
-  'PBE-7744': 'https://images.unsplash.com/photo-1559297434-fae8a1916a79?auto=format&fit=crop&w=1000&q=80',
-  // BYD T3 Electric (2024) - Furgoneta urbana 100% eléctrica
-  'PBE-3310': 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80',
-  // Hino GH 1826 (2022) - Camión pesado de carga logística
-  'PBA-1024': 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1000&q=80',
-  // Mercedes-Benz Atego 1726 (2023) - Camión de distribución de carga
-  'PBA-5589': 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=1000&q=80',
-  // Isuzu Forward FTR (2024) - Camión de transporte pesado
-  'PBA-9900': 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80',
-};
 
 interface VehiculoDetalleViewProps {
   vehiculoId: string;
   onBack: () => void;
   onNavigateToEfficiency: (id: string) => void;
+  onNavigateToEdit?: (id: string) => void;
 }
 
 export const VehiculoDetalleView: React.FC<VehiculoDetalleViewProps> = ({
   vehiculoId,
   onBack,
   onNavigateToEfficiency,
+  onNavigateToEdit,
 }) => {
   const [vehiculo, setVehiculo] = useState<Vehiculo | null>(null);
   const [servicios, setServicios] = useState<ServicioTransporte[]>([]);
@@ -105,6 +94,17 @@ export const VehiculoDetalleView: React.FC<VehiculoDetalleViewProps> = ({
           >
             ESTADO: {vehiculo.estado}
           </span>
+          {onNavigateToEdit && (
+            <button
+              type="button"
+              onClick={() => onNavigateToEdit(vehiculo.id)}
+              className="btn btn--outline h-10 px-3 text-xs font-bold flex items-center space-x-1.5 text-[#13235B] border-[#13235B] bg-white hover:bg-[#F3F5FA]"
+              title="Modificar Fotografía o Datos Técnicos"
+            >
+              <Edit3 className="w-4 h-4 text-[#F5A623]" />
+              <span>MODIFICAR FOTO / FICHA</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={() => onNavigateToEfficiency(vehiculo.id)}
@@ -130,13 +130,15 @@ export const VehiculoDetalleView: React.FC<VehiculoDetalleViewProps> = ({
               </span>
             </div>
 
-            {/* Fotografía del Vehículo en Flota */}
+            {/* Fotografía Dinámica del Vehículo en Base de Datos */}
             <div className="my-6 bg-[#F3F5FA] border border-[#D5DAE6] relative overflow-hidden">
               <div className="relative h-64 w-full bg-[#13235B]/10 flex items-center justify-center overflow-hidden">
                 <img
                   src={
-                    FOTOS_VEHICULOS[vehiculo.placa] ||
-                    (isCamion ? FOTOS_VEHICULOS['PBA-5589'] : FOTOS_VEHICULOS['PBE-7744'])
+                    vehiculo.imagenUrl ||
+                    (isCamion
+                      ? 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1000&q=80'
+                      : 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80')
                   }
                   alt={`${vehiculo.marca} ${vehiculo.modelo}`}
                   referrerPolicy="no-referrer"
@@ -144,10 +146,10 @@ export const VehiculoDetalleView: React.FC<VehiculoDetalleViewProps> = ({
                   loading="eager"
                   className="w-full h-full object-cover object-center filter brightness-100 hover:scale-102 transition-all duration-300"
                   onError={(e) => {
-                    // Fallback directo a CDN alternativo confiable
+                    // Fallback en caso de que la URL personalizada falle
                     (e.target as HTMLImageElement).src = isCamion
-                      ? 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1000&q=80'
-                      : 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80';
+                      ? 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=1000&q=80'
+                      : 'https://images.unsplash.com/photo-1559297434-fae8a1916a79?auto=format&fit=crop&w=1000&q=80';
                   }}
                 />
                 <div className="absolute bottom-2 right-2 bg-[#F5A623] text-[#0D1A4A] font-mono text-[10px] font-black px-2.5 py-1 tracking-wider uppercase shadow-md">

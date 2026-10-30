@@ -11,6 +11,7 @@ import {
 import { api } from '../api/client';
 import { ServicioTransporte, EstadoServicio, Usuario } from '../types';
 import { Pagination } from './Pagination';
+import { alerts } from '../utils/alerts';
 
 interface ServiciosViewProps {
   currentUser: Usuario | null;
@@ -51,12 +52,17 @@ export const ServiciosView: React.FC<ServiciosViewProps> = ({
   }, [page, filtroEstado]);
 
   const handleCambiarEstado = async (id: string, nuevoEstado: EstadoServicio) => {
-    if (!window.confirm(`¿Confirmar cambio de estado a '${nuevoEstado}'?`)) return;
+    const confirmed = await alerts.showConfirm(
+      'Confirmar Cambio de Estado',
+      `¿Desea cambiar el estado del servicio a '${nuevoEstado}'?`
+    );
+    if (!confirmed) return;
     try {
       await api.actualizarEstadoServicio(id, nuevoEstado);
+      await alerts.showSuccess('¡Estado Actualizado!', `El servicio ha cambiado exitosamente a '${nuevoEstado}'.`);
       loadServicios();
     } catch (err: any) {
-      alert(err.message || 'Error al cambiar estado');
+      await alerts.showError('Error al Cambiar Estado', err.message || 'No se pudo actualizar el estado del servicio');
     }
   };
 
@@ -95,7 +101,7 @@ export const ServiciosView: React.FC<ServiciosViewProps> = ({
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-1">
+      <div className="flex items-center space-x-2 overflow-x-auto no-scrollbar pb-1">
         {['', EstadoServicio.PROGRAMADO, EstadoServicio.EN_EJECUCION, EstadoServicio.COMPLETADO, EstadoServicio.CANCELADO].map(
           (est) => (
             <button
@@ -118,7 +124,7 @@ export const ServiciosView: React.FC<ServiciosViewProps> = ({
       </div>
 
       {/* Tabla Corporativa */}
-      <div className="bg-white border border-[#D5DAE6] overflow-x-auto shadow-sm">
+      <div className="bg-white border border-[#D5DAE6] overflow-x-auto no-scrollbar shadow-sm">
         {loading ? (
           <div className="p-12 text-center text-xs font-mono text-[#5B6480]">
             Cargando servicios de transporte...

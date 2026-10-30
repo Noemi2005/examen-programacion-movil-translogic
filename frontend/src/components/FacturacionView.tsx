@@ -5,6 +5,7 @@ import { Factura, Usuario, RolUsuario } from '../types';
 import { Pagination } from './Pagination';
 import { TicketPosModal } from './TicketPosModal';
 import { FacturaDetalleModal } from './FacturaDetalleModal';
+import { alerts } from '../utils/alerts';
 
 interface FacturacionViewProps {
   currentUser: Usuario | null;
@@ -40,6 +41,7 @@ export const FacturacionView: React.FC<FacturacionViewProps> = ({
   }, []);
 
   const handleDescargarPdf = async (id: string, codigo: string) => {
+    alerts.showToast(`Generando PDF ${codigo}...`, 'info');
     try {
       const blob = await api.descargarFacturaPdf(id);
       const url = window.URL.createObjectURL(blob);
@@ -49,8 +51,9 @@ export const FacturacionView: React.FC<FacturacionViewProps> = ({
       document.body.appendChild(a);
       a.click();
       a.remove();
+      alerts.showToast(`Descarga completada: ${codigo}`, 'success');
     } catch (err: any) {
-      alert(err.message || 'Error al descargar PDF');
+      await alerts.showError('Error al Descargar PDF', err.message || 'No se pudo generar el archivo PDF');
     }
   };
 
@@ -83,7 +86,7 @@ export const FacturacionView: React.FC<FacturacionViewProps> = ({
       </div>
 
       {/* Tabla Corporativa */}
-      <div className="bg-white border border-[#D5DAE6] overflow-x-auto shadow-sm">
+      <div className="bg-white border border-[#D5DAE6] overflow-x-auto no-scrollbar shadow-sm">
         {loading ? (
           <div className="p-12 text-center text-xs font-mono text-[#5B6480]">
             Cargando libro de comprobantes...

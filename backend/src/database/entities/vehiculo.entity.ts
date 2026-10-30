@@ -40,6 +40,9 @@ export class Vehiculo {
   })
   estado: EstadoVehiculo;
 
+  @Column({ type: 'text', nullable: true })
+  imagenUrl?: string;
+
   @OneToOne(() => CamionCarga, (camion) => camion.vehiculo, { cascade: true, eager: true })
   camionCarga?: CamionCarga;
 

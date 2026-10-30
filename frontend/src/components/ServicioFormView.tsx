@@ -3,6 +3,7 @@ import { ArrowLeft, Calculator, Save, AlertCircle } from 'lucide-react';
 import { api } from '../api/client';
 import { Vehiculo, Cliente, SimulacionTarifaResponse } from '../types';
 import { ClienteCombobox } from './ClienteCombobox';
+import { alerts } from '../utils/alerts';
 
 interface ServicioFormViewProps {
   onBack: () => void;
@@ -115,9 +116,12 @@ export const ServicioFormView: React.FC<ServicioFormViewProps> = ({ onBack, onSu
         horaFinEstimada,
         recargaPlanificada,
       });
+      await alerts.showSuccess('¡Despacho Planificado!', `El servicio ha sido registrado correctamente.`);
       onSuccess();
     } catch (err: any) {
-      setError(err.message || 'Error al crear servicio');
+      const msg = err.message || 'Error al crear servicio';
+      setError(msg);
+      await alerts.showError('Error de Planificación', msg);
     } finally {
       setLoading(false);
     }
